@@ -7,7 +7,7 @@ import { useState } from 'react'
 import { useMutation } from '@apollo/client'
 import { ADD_POST, ADD_SUBREDDIT } from '../graphql/mutations'
 import client from '../apollo-client'
-import { GET_SUBREDDIT_BY_TOPIC } from '../graphql/queries'
+import { GET_ALL_POST, GET_SUBREDDIT_BY_TOPIC } from '../graphql/queries'
 import toast from 'react-hot-toast'
 
 
@@ -17,23 +17,28 @@ type FormData = {
     postImage: String
     subReddit: String
 }
+type Props = {
+    subreddit?: string
+}
 
-function PostBox() {
+function PostBox({ subreddit }: Props) {
     const { data: session } = useSession()
     const [imageBoxOpen, setImageBoxOpen] = useState<Boolean>(false)
     const { register, setValue, handleSubmit, watch, formState: { errors } } = useForm<FormData>()
 
-    const [addPost] = useMutation(ADD_POST)
+    const [addPost] = useMutation(ADD_POST, {
+        refetchQueries: [GET_ALL_POST, 'getPostList']
+    })
     const [addSubreddit] = useMutation(ADD_SUBREDDIT)
 
     const submit = handleSubmit(async (formData) => {
         console.log(formData);
-        const notification = toast.loading('Creating new toast....')
+        const notification = toast.loading('Creating new post....')
         try {
             const { data: { getSubredditListByTopic } } = await client.query({
                 query: GET_SUBREDDIT_BY_TOPIC,
                 variables: {
-                    topic: formData.subReddit
+                    topic: subreddit || formData.subReddit
                 }
             })
 
@@ -88,7 +93,7 @@ function PostBox() {
     })
 
     return (
-        <form onSubmit={submit} className='sticky top-16 z-50 p-2 bg-white border border-gray-300 rounded-md'>
+        <form onSubmit={submit} className='sticky top-20 z-50 p-2 bg-white border border-gray-300 rounded-md'>
             <div className='flex items-center space-x-3'>
                 <Avatar seed='meo' />
                 {/* Avatar */}
@@ -97,7 +102,7 @@ function PostBox() {
                     disabled={!session}
                     className=' flex-1 rounded-md bg-gray-50 p-2 pl-5 outline-none'
                     type='text'
-                    placeholder={session ? 'Create a post by entering a title' : 'Sign in to post'}
+                    placeholder={session ? subreddit ? `Create a post in r/${subreddit} ` : 'Create a post by entering a title' : 'Sign in to post'}
                 />
                 <PhotographIcon onClick={() => setImageBoxOpen(!imageBoxOpen)} className={`h-6 text-gray-300 cursor-pointer ${imageBoxOpen && 'text-blue-300'}`} />
                 <LinkIcon className='h-6 text-gray-300' />
@@ -110,10 +115,12 @@ function PostBox() {
                         <input className='m-2 flex-1 p-2 bg-blue-50 outline-none' {...register('postBody')} type='text' placeholder='text (optional)' />
                     </div>
 
-                    <div className='flex items-center px-2'>
-                        <p className='min-w-[90px]'>SubReddit:</p>
-                        <input className='m-2 flex-1 p-2 bg-blue-50 outline-none' {...register('subReddit', { required: true })} type='text' placeholder='i.e. reactjs' />
-                    </div>
+                    {!subreddit &&
+                        <div className='flex items-center px-2'>
+                            <p className='min-w-[90px]'>SubReddit:</p>
+                            <input className='m-2 flex-1 p-2 bg-blue-50 outline-none' {...register('subReddit', { required: true })} type='text' placeholder='i.e. reactjs' />
+                        </div>
+                    }
 
                     {imageBoxOpen && (
                         <div className='flex items-center px-2'>

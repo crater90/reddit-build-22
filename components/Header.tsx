@@ -1,8 +1,12 @@
-import Image from 'next/image'
 import React from 'react'
-import { HomeIcon, BeakerIcon, ChevronDownIcon, SearchIcon } from '@heroicons/react/solid'
-import { SparklesIcon, GlobeIcon, VideoCameraIcon, ChatIcon, BellIcon, PlusIcon, SpeakerphoneIcon, MenuIcon } from '@heroicons/react/outline'
+
+import Image from 'next/image'
+import Link from 'next/link'
+
 import { signIn, signOut, useSession } from 'next-auth/react'
+
+import { HomeIcon, ChevronDownIcon, SearchIcon } from '@heroicons/react/solid'
+import { SparklesIcon, GlobeIcon, VideoCameraIcon, ChatIcon, BellIcon, PlusIcon, SpeakerphoneIcon, MenuIcon } from '@heroicons/react/outline'
 
 function Header() {
     const { data: session } = useSession();
@@ -10,7 +14,9 @@ function Header() {
         <div className='sticky top-0 z-50 flex bg-white px-4 py-2 shadow-sm'>
 
             <div className='relative h-10 w-20 flex-shrink-0 cursor-pointer'>
-                <Image objectFit='contain' src='https://links.papareact.com/fqy' layout='fill' />
+                <Link href='/'>
+                    <Image objectFit='contain' src='https://links.papareact.com/fqy' layout='fill' />
+                </Link>
             </div>
 
             <div className=' mx-7 flex items-center xl:min-w-[300px]'>
