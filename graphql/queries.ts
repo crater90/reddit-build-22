@@ -108,3 +108,25 @@ query MyQuery($topic: String!) {
     }
 }
 `
+
+export const GET_SUBREDDIT_WITH_LIMIT = gql`
+query MyQuery($limit: Int!) {
+    getSubredditListByLimit(limit: $limit) {
+        id
+        topic
+        created_at
+    }
+}
+`
+
+export const GET_VOTES_BY_POST_ID = gql`
+query MyQuery($post_id: ID!) {
+    getVotesByPostId(post_id: $post_id) {
+        created_at
+        id
+        post_id
+        upvote
+        username
+    }
+}
+`
