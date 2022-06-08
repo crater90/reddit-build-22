@@ -71,7 +71,7 @@ function SinglePostView() {
             {post &&
                 <div className='-my-5 rounded-b-md border-t-0 border border-gray-300 bg-white py-5 px-10'>
                     <hr className='py-2' />
-                    {post?.comments.map(comment => (
+                    {(post?.comments as any).map((comment: { id: string; username: string; created_at: string | number | Date; text: string; }) => (
                         <div className='relative flex items-center space-x-2 space-y-5' key={comment.id}>
                             <hr className='absolute left-7 top-10 z-0 h-16 border' />
                             <div className='z-50'>

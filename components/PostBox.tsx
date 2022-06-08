@@ -131,11 +131,11 @@ function PostBox({ subreddit }: Props) {
 
                     {Object.keys(errors).length > 0 && (
                         <div className='space-y-2 p-2 text-red-500'>
-                            {errors.postTitle?.type === 'required' && (
+                            {(errors.postTitle as any)?.type === 'required' && (
                                 <p>A Post Title is required.</p>
                             )}
 
-                            {errors.subReddit?.type === 'required' && (
+                            {(errors.subReddit as any)?.type === 'required' && (
                                 <p>A Subreddit is required.</p>
                             )}
                         </div>

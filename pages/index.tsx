@@ -26,7 +26,7 @@ const Home: NextPage = () => {
         <div className='sticky top-36 mx-5 mt-5 hidden h-fit min-w-[300px] rounded-md border border-gray-300 bg-white lg:inline '>
           <p className='font-bold p-4 pb-3 mb-1'>Top Communities</p>
           <div>
-            {subreddits.map((subreddit, i) => (
+            {subreddits?.map((subreddit, i) => (
               <SubredditRow key={subreddit.id} topic={subreddit.topic} index={i} />
             ))}
           </div>

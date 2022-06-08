@@ -38,7 +38,6 @@ function Post({ post }: Props) {
             vote.username === session?.user?.name
         })?.upvote
         setVote(vote);
-        console.log(vote);
     }, [data])
 
     const upVote = async (isUpVote: boolean) => {
